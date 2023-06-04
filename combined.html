@@ -3,17 +3,58 @@
 <head>
   <title>Graph Visualization with vis.js</title>
   <style type="text/css">
-    #graph {
-      width: 600px;
-      height: 400px;
-    }
+body {
+  display: flex;
+  background-image:url("graph_theme_use.jpg");
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  display: flex;
+  align-items: flex-start;
+  margin-right: 300px
+}
+
+#list-container {
+  width: 200px;
+  background-color: #315746;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  padding: 10px;
+  margin-right: 10px; /* Add margin to create space between the two elements */
+}
+
+#graph {
+  width: 600px;
+  height: 400px;
+  background-color: #315746;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.title {  
+  text-align: center;
+  margin-bottom: 600px;
+  font-size: 36px;
+  font-weight: bold;
+  color: #f0f2e9;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+  </style>
+	
   </style>
   <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
+  <h1 class="title">Dependency Visualizer</h1>
 
-  <div id="graph"></div>
+  <div class="container">
   <div id="list-container"></div>
+  <div id="graph"></div>
+  </div>
   
   <script src="ListDirectories.js"></script>
  
