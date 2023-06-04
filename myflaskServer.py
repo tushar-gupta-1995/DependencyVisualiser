@@ -7,13 +7,11 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Provide the directory path you want to traverse
 directory_path = 'C:\\Users\\gupta\\OneDrive\\Documents\\test\\test_folder'
 main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
 
 pattern = 'import\(\".+\)'
 
-# Define the adjacency list data
 adjacency_list = {
     'modes.go': ['modes_d.go', 'modes_e.go'],
     'modes_d.go': ['C'],
@@ -65,10 +63,8 @@ def get_adjacency_list():
 
 @app.route('/api/directories', methods=['GET'])
 def get_directories():
-    # Get a list of all items (files and folders) in the directory
     items = os.listdir(main_dir)
 
-    # Filter only the directories from the list
     child_folders = [item for item in items if os.path.isdir(os.path.join(main_dir, item))]
 
     dir_str = {}
