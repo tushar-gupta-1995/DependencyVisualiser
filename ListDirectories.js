@@ -9,6 +9,8 @@
         // Get the element where you want to add the unordered list
         const listContainer = document.getElementById('list-container');
 		listContainer.addEventListener("click", renderGraph);
+		listContainer.addEventListener('contextmenu', showContextMenu);
+		listContainer.addEventListener('click', hideContextMenu);
 
         // Create an unordered list element
         const ul = document.createElement('ul');
@@ -32,7 +34,6 @@
 	  function renderGraph(event)
 	{
 		const clickedElement = event.target;
-		console.log(clickedElement.textContent);
 		
 		const apiUrl = 'http://127.0.0.1:5000/api/adjacency-list?folder='+clickedElement.textContent;
 		
@@ -80,3 +81,31 @@
 			console.error('Error fetching adjacency list:', error);
 		  })
 	}
+	
+const contextMenu = document.getElementById('contextMenu');
+
+function showContextMenu(event) {
+  const clickedElement = event.target;
+  console.log(clickedElement.textContent);
+  event.preventDefault();
+  contextMenu.style.display = 'block';
+  contextMenu.style.left = event.pageX + 'px';
+  contextMenu.style.top = event.pageY + 'px';
+  
+  fetch('http://127.0.0.1:5000/api/set_test_directories?test_dir='+clickedElement.textContent)
+  contextMenu.onclick=redirectToTestCasePage
+}
+
+function redirectToTestCasePage() {
+	window.location.href="test_documentaion_generator.html"
+}
+
+
+
+function hideContextMenu() {
+  contextMenu.style.display = 'none';
+  contextMenu.onclick=""
+}
+ 
+ 
+

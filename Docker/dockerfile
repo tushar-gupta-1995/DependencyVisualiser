@@ -1,0 +1,7 @@
+FROM python:alpine3.18
+
+COPY . /app
+
+WORKDIR /app
+
+ENTRYPOINT ["python", "PythonServer.py"]
