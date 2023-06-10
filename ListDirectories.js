@@ -42,6 +42,7 @@
 		fetch(apiUrl)
 		  .then(response => response.json())
 		  .then(adjacencyList => {
+			console.log(adjacencyList)
 			const nodes = [];
 			const edges = [];
 
@@ -75,7 +76,7 @@
 			};
 
 			const container = document.getElementById("graph");
-			const network = new vis.Network(container, data, options);
+			new vis.Network(container, data, options);
 		  })
 		  .catch(error => {
 			console.error('Error fetching adjacency list:', error);
