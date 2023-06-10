@@ -8,26 +8,45 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+# Provide the directory path you want to traverse
+# directory_path = 'C:\\Users\\gupta\\OneDrive\\Documents\\test\\'
 main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
 test_dir = main_dir
+
+# pattern = 'import\(\".+\)'
+
+# Define the adjacency list data
+adjacency_list = {
+    'modes.go': ['modes_d.go', 'modes_e.go'],
+    'modes_d.go': ['C'],
+    'modes_e.go': ['A', 'B']
+}
+
 
 def traverse_directory(directory):
     print(directory)
     adjList = {}
+    # pattern = '(?<=import\s\(\n\t)(\d|\D|\n)*?\)'
+    # pattern = r'(?<=import\s\(\n\t)(\d|\D|\n)*?\)'
     pattern = r'(?<=import\s\()(.*)'
     for root, dirs, files in os.walk(directory):
         for file in files:
             file_path = os.path.join(root, file)
             print(file)
             dependency_list = []
+            # Perform file reading operations on file_path
             with open(file_path, 'r') as f:
                 content = f.read().replace("\n\t", "")
                 print("content: ")
                 print(content)
+                # content = content.replace("\n", "")
+                # content = content.replace("\t", "")
+                # content = content.replace(" ", "")
                 content = extract_pattern(pattern, content)
                 print("content: ")
                 print(content)
                 for dependency in content:
+                    # dependency = dependency.replace("import(","")
                     dependency = dependency.replace(")", "")
                     dependency = dependency.split('"')
                     print("dependency: " )
@@ -40,7 +59,10 @@ def traverse_directory(directory):
                             adjList[dep] = ['nil']
                     file_without_extension = file.split('.')[0]
                     adjList[file_without_extension] = dependency_list
+                    # print(dependency)
+    print(adjList)
     return adjList
+                # print(content)  # Replace this with your desired file processing logic
 
 
 def extract_pattern(regex, text):
@@ -58,8 +80,10 @@ def get_adjacency_list():
 
 @app.route('/api/directories', methods=['GET'])
 def get_directories():
+    # Get a list of all items (files and folders) in the directory
     items = os.listdir(main_dir)
 
+    # Filter only the directories from the list
     child_folders = [item for item in items if os.path.isdir(os.path.join(main_dir, item))]
 
     dir_str = {}
@@ -99,8 +123,12 @@ def get_test_directories():
 @app.route('/api/get_content', methods=['GET'])
 def extract_content_and_display():
     test_file = request.args.get('test_file').replace("\"", "")
-    file_full_path=test_dir+"\\"+test_file
-    content_map={}
+    file_full_path = ''
+    for root, dirs, files in os.walk(test_dir):
+        if test_file in files:
+            file_full_path = os.path.join(root, test_file)
+            break
+    content_map = {}
     with open(file_full_path, 'r') as f:
         content = f.read()
     content_map['content'] = content
@@ -141,6 +169,8 @@ def extract_commnts():
 @app.route('/download_markdown')
 def download_markdown():
     content = 'this is my file'
+
+    # Create an in-memory file-like object
     file_stream = io.BytesIO()
     file_stream.write(content.encode())
     file_stream.seek(0)
@@ -153,4 +183,8 @@ def get_list_matches(regex,text):
     result_list = []
     for match in matches:
         result_list.append(match[0])
+        # print(match[0])
     return result_list
+
+if __name__ == '__main__':
+    app.run()
