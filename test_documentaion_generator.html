@@ -27,12 +27,13 @@ body {
   margin-right: 10px; /* Add margin to create space between the two elements */
 }
 
-#graph {
+#test_code {
   width: 600px;
   height: 400px;
   background-color: #315746;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
+  overflow: auto; /* Enable scrolling */
 }
 
 .title {  
@@ -44,23 +45,16 @@ body {
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-#contextMenu {
-  position: absolute;
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  padding: 5px;
+.bottom-left-button {
+	position: absolute;
+	bottom: 10px; /* Adjust the distance from the bottom as needed */
+	left: 10px; /* Adjust the distance from the left as needed */
+	background-color: #f44336; /* Adjust the button styling as needed */
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	cursor: pointer;
 }
-
-#contextMenu ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-#contextMenu ul li {
-  cursor: pointer;
-}
-
   </style>
 	
   </style>
@@ -71,16 +65,12 @@ body {
 
   <div class="container">
   <div id="list-container"></div>
-  <!-- Context menu -->
-	<div id="contextMenu" style="display: none;">
-	  <ul>
-		<li>Document Test Cases</li>
-	  </ul>
-	</div>
-  <div id="graph"></div>
+  <div id="test_code"></div>
   </div>
   
-  <script src="ListDirectories.js"></script>
+   <button class="bottom-left-button" onclick="extract_comments()">Button</button>
+  
+  <script src="ListTestDirectories.js"></script>
  
 </body>
 </html>
