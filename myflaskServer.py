@@ -13,16 +13,6 @@ CORS(app)
 main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
 test_dir = main_dir
 
-# pattern = 'import\(\".+\)'
-
-# Define the adjacency list data
-adjacency_list = {
-    'modes.go': ['modes_d.go', 'modes_e.go'],
-    'modes_d.go': ['C'],
-    'modes_e.go': ['A', 'B']
-}
-
-
 def traverse_directory(directory):
     print(directory)
     adjList = {}
@@ -137,34 +127,46 @@ def extract_content_and_display():
 @app.route('/api/extract_comments', methods=['GET'])
 def extract_commnts():
     test_code = request.args.get('test_code')
-    test_code = re.sub(r"\s{4}", "\n", test_code)
-    get_all_functions_regex = "func (.*(?=(\()))"
-    all_methods_list = get_list_matches(get_all_functions_regex,test_code)
-    print(all_methods_list)
-    method_logic_map = {}
-    for method in all_methods_list:
-        modified_regex = r"func\s+" + re.escape(method) + r"\b[\s\S]*?(?=\nfunc|\Z)"
-        method_logic = re.findall(modified_regex, test_code)
-        accumulated_logic = ""
-        for logic in method_logic:
-            accumulated_logic=accumulated_logic+logic
-        method_logic_map[method] = accumulated_logic
-    regex_extract_comments = r"// step \d+((.|\n\s*//)*)"
-    comments = ""
-    for method in all_methods_list:
-        logic = method_logic_map[method]
-        comment_list = re.findall(regex_extract_comments, logic)
-        i = 1;
-        for comment in comment_list:
-            comment = comment[0]
-            comment = comment.replace(":", "").replace("//", "")
-            comment = "Step " + str(i) + ": " + str(comment)
-            comments = comments + comment + "\n"
-            i = i + 1
-    file_stream = io.BytesIO()
-    file_stream.write(comments.encode())
-    file_stream.seek(0)
-    return send_file(file_stream, mimetype='text/markdown', as_attachment=True, download_name='example.md')
+    # test_code = re.sub(r"\s{4}", "\n", test_code)
+    print(test_code)
+    return repr(test_code)
+    # get_all_functions_regex = r"func\s+(\w+)\s*"
+    # all_methods_list = get_list_matches_all(get_all_functions_regex,test_code)
+    # print("method list")
+    # print(all_methods_list)
+    # method_logic_map = {}
+    # comments = ""
+    # for method in all_methods_list:
+    #     comments = comments + "\n"
+    #     modified_regex = r"func\s+" + re.escape(method) + r"\b[\s\S]*?(?=\nfunc|\Z)"
+    #     method_logic = re.findall(modified_regex, test_code)
+    #     accumulated_logic = ""
+    #     for logic in method_logic:
+    #         accumulated_logic=accumulated_logic+logic
+    #         print("accumulated")
+    #         print(accumulated_logic)
+    #     method_logic_map[method] = accumulated_logic
+    # regex_extract_comments = r"// Step \d+((.|\n\s*//)*)"
+    # for method in all_methods_list:
+    #     logic = method_logic_map[method]
+    #     comment_list = re.findall(regex_extract_comments, logic)
+    #     print("comment list")
+    #     print(comment_list)
+    #     i = 1;
+    #     test_case_name="# Test Case: " + method
+    #     print(method)
+    #     for comment in comment_list:
+    #         comment = comment[0]
+    #         comment = comment.replace(":", "").replace("//", "")
+    #         comment = "- Step " + str(i) + ": " + str(comment)
+    #         comments = comments + comment + "\n"
+    #         print(comments)
+    #         i = i + 1
+    # comments = test_case_name + "\n" + comments
+    # file_stream = io.BytesIO()
+    # file_stream.write(comments.encode())
+    # file_stream.seek(0)
+    # return send_file(file_stream, mimetype='text/markdown', as_attachment=True, download_name='example.md')
 
 @app.route('/download_markdown')
 def download_markdown():
@@ -183,6 +185,14 @@ def get_list_matches(regex,text):
     result_list = []
     for match in matches:
         result_list.append(match[0])
+        # print(match[0])
+    return result_list
+
+def get_list_matches_all(regex,text):
+    matches = re.findall(regex, text)
+    result_list = []
+    for match in matches:
+        result_list.append(match)
         # print(match[0])
     return result_list
 

@@ -50,9 +50,10 @@ function extract_comments()
 {
 	console.log("hello");
 	test_Code = document.getElementById("test_code").innerHTML;
-	test_Code = test_code.replace('<br>',/\n/g);
+	test_Code = test_code.replaceAll('<br>',/\n/g).replaceAll('&','and');
+	console.log(test_Code)
 	window.location.href = 'http://127.0.0.1:5000/api/extract_comments?test_code='+test_Code;
-	//fetch(apiUrl)
+	//fetch('http://127.0.0.1:5000/api/extract_comments?test_code='+test_Code)
 }
 	  
 list_test_directories()
