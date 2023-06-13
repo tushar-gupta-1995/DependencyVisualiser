@@ -48,12 +48,8 @@ function renderTestCode(event)
 
 function extract_comments()
 {
-	console.log("hello");
-	test_Code = document.getElementById("test_code").innerHTML;
-	test_Code = test_code.replaceAll('<br>',/\n/g).replaceAll('&','and');
-	console.log(test_Code)
-	window.location.href = 'http://127.0.0.1:5000/api/extract_comments?test_code='+test_Code;
-	//fetch('http://127.0.0.1:5000/api/extract_comments?test_code='+test_Code)
+	//window.location.href = 'http://127.0.0.1:5000/api/extract_comments';
+	fetch('http://127.0.0.1:5000/api/extract_comments')
 }
 	  
 list_test_directories()
