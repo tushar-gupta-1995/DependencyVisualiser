@@ -1,8 +1,9 @@
 import io
 import os
 import re
+import subprocess
 
-from flask import Flask, jsonify, request, send_file
+from flask import Flask, jsonify, request, send_file, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -10,8 +11,23 @@ CORS(app)
 
 # Provide the directory path you want to traverse
 # directory_path = 'C:\\Users\\gupta\\OneDrive\\Documents\\test\\'
-main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
+# main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
+main_dir = '/testfolder'
 test_dir = main_dir
+current_test_dir =  main_dir
+
+# pattern = 'import\(\".+\)'
+
+# Define the adjacency list data
+adjacency_list = {
+    'modes.go': ['modes_d.go', 'modes_e.go'],
+    'modes_d.go': ['C'],
+    'modes_e.go': ['A', 'B']
+}
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 def traverse_directory(directory):
     print(directory)
@@ -63,7 +79,7 @@ def extract_pattern(regex, text):
 @app.route('/api/adjacency-list', methods=['GET'])
 def get_adjacency_list():
     folder_in_analysis = request.args.get('folder')
-    adjList=traverse_directory(main_dir +"\\"+ folder_in_analysis)
+    adjList=traverse_directory(main_dir +'/'+ folder_in_analysis)
     print(adjList)
     return jsonify(adjList)
 
@@ -119,6 +135,8 @@ def extract_content_and_display():
             file_full_path = os.path.join(root, test_file)
             break
     content_map = {}
+    global current_test_dir
+    current_test_dir = file_full_path
     with open(file_full_path, 'r') as f:
         content = f.read()
     content_map['content'] = content
@@ -126,47 +144,19 @@ def extract_content_and_display():
 
 @app.route('/api/extract_comments', methods=['GET'])
 def extract_commnts():
-    test_code = request.args.get('test_code')
-    # test_code = re.sub(r"\s{4}", "\n", test_code)
-    print(test_code)
-    return repr(test_code)
-    # get_all_functions_regex = r"func\s+(\w+)\s*"
-    # all_methods_list = get_list_matches_all(get_all_functions_regex,test_code)
-    # print("method list")
-    # print(all_methods_list)
-    # method_logic_map = {}
-    # comments = ""
-    # for method in all_methods_list:
-    #     comments = comments + "\n"
-    #     modified_regex = r"func\s+" + re.escape(method) + r"\b[\s\S]*?(?=\nfunc|\Z)"
-    #     method_logic = re.findall(modified_regex, test_code)
-    #     accumulated_logic = ""
-    #     for logic in method_logic:
-    #         accumulated_logic=accumulated_logic+logic
-    #         print("accumulated")
-    #         print(accumulated_logic)
-    #     method_logic_map[method] = accumulated_logic
-    # regex_extract_comments = r"// Step \d+((.|\n\s*//)*)"
-    # for method in all_methods_list:
-    #     logic = method_logic_map[method]
-    #     comment_list = re.findall(regex_extract_comments, logic)
-    #     print("comment list")
-    #     print(comment_list)
-    #     i = 1;
-    #     test_case_name="# Test Case: " + method
-    #     print(method)
-    #     for comment in comment_list:
-    #         comment = comment[0]
-    #         comment = comment.replace(":", "").replace("//", "")
-    #         comment = "- Step " + str(i) + ": " + str(comment)
-    #         comments = comments + comment + "\n"
-    #         print(comments)
-    #         i = i + 1
-    # comments = test_case_name + "\n" + comments
-    # file_stream = io.BytesIO()
-    # file_stream.write(comments.encode())
-    # file_stream.seek(0)
-    # return send_file(file_stream, mimetype='text/markdown', as_attachment=True, download_name='example.md')
+    go_binary_path = "C:\\Users\\gupta\\DependencyVisualiser\\DependencyVisualiser.exe"
+
+    command = [go_binary_path, current_test_dir]
+
+    result = subprocess.run(command, capture_output=True, text=True)
+
+    print("Output:", result.stdout)
+
+    doc = result.stdout
+    file_stream = io.BytesIO()
+    file_stream.write(doc.encode())
+    file_stream.seek(0)
+    return send_file(file_stream, mimetype='text/markdown', as_attachment=True, download_name='doc.md')
 
 @app.route('/download_markdown')
 def download_markdown():
@@ -197,4 +187,6 @@ def get_list_matches_all(regex,text):
     return result_list
 
 if __name__ == '__main__':
-    app.run()
+    print("port 5000")
+    app.run(host='0.0.0.0', port=5000)
+

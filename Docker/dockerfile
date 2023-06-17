@@ -8,4 +8,12 @@ COPY . /app
 
 WORKDIR /app
 
-ENTRYPOINT ["python", "PythonServer.py"]
+RUN apk update && apk add --no-cache curl
+
+RUN go build
+
+RUN pip install flask
+
+RUN pip install flask-cors
+
+CMD ["python", "frontend_server.py", "&", "python", "backend_server.py"]
