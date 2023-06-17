@@ -16,4 +16,4 @@ RUN pip install flask
 
 RUN pip install flask-cors
 
-CMD ["python", "frontend_server.py", "&", "python", "backend_server.py"]
+CMD ["python", "control_server.py"]
