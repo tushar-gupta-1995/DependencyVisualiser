@@ -92,7 +92,8 @@ function showContextMenu(event) {
 }
 
 function redirectToTestCasePage() {
-	window.location.href="test_documentaion_generator.html"
+	// window.location.href="{{ url_for('test_documentation_generator') }}"
+	window.location.href = "http://localhost:5000/test_documentation_generator";
 }
 
 

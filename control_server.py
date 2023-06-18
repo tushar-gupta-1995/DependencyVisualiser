@@ -1,6 +1,8 @@
 import io
+import json
 import os
 import re
+import shlex
 import subprocess
 
 from flask import Flask, jsonify, request, send_file, render_template
@@ -9,7 +11,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-# Provide the directory path you want to traverse
+# Provide  the directory path you want to traverse
 # directory_path = 'C:\\Users\\gupta\\OneDrive\\Documents\\test\\'
 # main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
 main_dir = '/testfolder'
@@ -18,58 +20,14 @@ current_test_dir =  main_dir
 
 # pattern = 'import\(\".+\)'
 
-# Define the adjacency list data
-adjacency_list = {
-    'modes.go': ['modes_d.go', 'modes_e.go'],
-    'modes_d.go': ['C'],
-    'modes_e.go': ['A', 'B']
-}
-
 @app.route('/')
 def index():
     return render_template('index.html')
 
-def traverse_directory(directory):
-    print(directory)
-    adjList = {}
-    # pattern = '(?<=import\s\(\n\t)(\d|\D|\n)*?\)'
-    # pattern = r'(?<=import\s\(\n\t)(\d|\D|\n)*?\)'
-    pattern = r'(?<=import\s\()(.*)'
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            file_path = os.path.join(root, file)
-            print(file)
-            dependency_list = []
-            # Perform file reading operations on file_path
-            with open(file_path, 'r') as f:
-                content = f.read().replace("\n\t", "")
-                print("content: ")
-                print(content)
-                # content = content.replace("\n", "")
-                # content = content.replace("\t", "")
-                # content = content.replace(" ", "")
-                content = extract_pattern(pattern, content)
-                print("content: ")
-                print(content)
-                for dependency in content:
-                    # dependency = dependency.replace("import(","")
-                    dependency = dependency.replace(")", "")
-                    dependency = dependency.split('"')
-                    print("dependency: " )
-                    print(dependency)
-                    for dep in dependency:
-                        if dep!='//_ ' and dep!='':
-                            dep=extract_pattern(r'[^/]+$',dep)[0]
-                            print(dep)
-                            dependency_list.append(dep)
-                            adjList[dep] = ['nil']
-                    file_without_extension = file.split('.')[0]
-                    adjList[file_without_extension] = dependency_list
-                    # print(dependency)
-    print(adjList)
-    return adjList
-                # print(content)  # Replace this with your desired file processing logic
-
+@app.route('/test_documentation_generator', methods=['GET'])
+def new_page():
+    print("rendering test case doc page")
+    return render_template('test_documentation_generator.html')
 
 def extract_pattern(regex, text):
     matches = re.findall(regex, text)
@@ -78,11 +36,18 @@ def extract_pattern(regex, text):
 
 @app.route('/api/adjacency-list', methods=['GET'])
 def get_adjacency_list():
-    folder_in_analysis = request.args.get('folder')
-    adjList=traverse_directory(main_dir +'/'+ folder_in_analysis)
-    print(adjList)
-    return jsonify(adjList)
+    go_binary_path = "/app/DependencyVisualiser"
+    folder_in_analysis = main_dir + "/"+ request.args.get('folder')
+    print("folder in analysis: " + folder_in_analysis)
+    command = [go_binary_path, "-trigger-point", "dependency", "-dir", folder_in_analysis]
+    print("Executing command:", " ".join(shlex.quote(arg) for arg in command))
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
+    stdout, stderr = process.communicate()
+    print(stdout.decode())
+    print(stderr.decode())
+    output = json.loads(stdout.decode())
+    return output
 
 @app.route('/api/directories', methods=['GET'])
 def get_directories():
@@ -108,7 +73,7 @@ def prepare_main_directory():
 def set_test_directories():
     global test_dir
     folder_to_test = request.args.get('test_dir')
-    test_dir = main_dir + "\\" + folder_to_test
+    test_dir = main_dir + "/" + folder_to_test
     print(test_dir)
     return test_dir
 
@@ -144,8 +109,8 @@ def extract_content_and_display():
 
 @app.route('/api/extract_comments', methods=['GET'])
 def extract_commnts():
-    go_binary_path = "C:\\Users\\gupta\\DependencyVisualiser\\DependencyVisualiser.exe"
-
+    # go_binary_path = "C:\\Users\\gupta\\DependencyVisualiser\\DependencyVisualiser.exe"
+    go_binary_path = "/app/DependencyVisualiser"
     command = [go_binary_path, current_test_dir]
 
     result = subprocess.run(command, capture_output=True, text=True)

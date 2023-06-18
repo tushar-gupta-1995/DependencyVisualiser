@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
 	"go/ast"
@@ -51,28 +52,33 @@ func GetDependency(directory string) (map[string][]string, error) {
 		if err != nil {
 			return err
 		}
-		if info.IsDir() {
-			return nil
-		}
+
 		if filepath.Ext(path) != ".go" {
 			return nil
 		}
 
 		fset := token.NewFileSet()
 		file, err := parser.ParseFile(fset, path, nil, parser.ImportsOnly)
+		// fmt.Println(path, info.Size())
 		if err != nil {
 			return err
 		}
 
-		moduleName := filepath.Dir(path)
-
 		var moduleDependencies []string
+		// each module has at least a nil dependency
+		moduleDependencies = append(moduleDependencies, "nil")
+
 		for _, imp := range file.Imports {
 			importPath := strings.Trim(imp.Path.Value, "\"")
 			moduleDependencies = append(moduleDependencies, importPath)
+
+			// each dependency itself is a key to register as a mapping in graph, so check if it exists else add it as a key
+			if _, exists := dependencies[importPath]; !exists {
+				dependencies[importPath] = []string{"nil"}
+			}
 		}
 
-		dependencies[moduleName] = moduleDependencies
+		dependencies[path] = moduleDependencies
 
 		return nil
 	})
@@ -81,11 +87,19 @@ func GetDependency(directory string) (map[string][]string, error) {
 		return nil, err
 	}
 
-	for key, dep := range dependencies {
-		fmt.Println(key + ":")
-		fmt.Print(dep)
+	// for key, dep := range dependencies {
+	// 	fmt.Println(key + ":")
+	// 	fmt.Print(dep)
+	// }
+
+	// Convert dictionary to JSON
+	jsonData, err := json.Marshal(dependencies)
+	if err != nil {
+		return nil, err
 	}
 
+	// Print JSON data
+	fmt.Println(string(jsonData))
 	return dependencies, nil
 }
 
@@ -94,7 +108,6 @@ func main() {
 	trigger := flag.String("trigger-point", "dependency", "trigger dependency vs trigger getting documentation")
 	directory := flag.String("dir", "doc", "add documentation")
 	flag.Parse()
-	fmt.Println(*trigger)
 
 	switch *trigger {
 	case "dependency":
