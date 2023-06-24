@@ -111,8 +111,7 @@ def extract_content_and_display():
 def extract_commnts():
     # go_binary_path = "C:\\Users\\gupta\\DependencyVisualiser\\DependencyVisualiser.exe"
     go_binary_path = "/app/DependencyVisualiser"
-    command = [go_binary_path, current_test_dir]
-
+    command = [go_binary_path, "-trigger-point", "documentation", "-dir", current_test_dir]
     result = subprocess.run(command, capture_output=True, text=True)
 
     print("Output:", result.stdout)
