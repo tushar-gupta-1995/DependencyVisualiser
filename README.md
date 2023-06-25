@@ -30,9 +30,9 @@ Requires docker to be installed on your machine.
 From the root of the repo run `docker build -t <my_image_name> -f Docker/dockerfile .`, replacing <my_image_name> with your preffered image name.
 
 ## Run docker image in the container
-First identify the module you want to analyse(should usually have 1 or more golang projects), then mount it as a volume, expose the port 5000 on container to a free port of your choice on your local machine, provide the image id.
+First identify the module you want to analyse(should usually have 1 or more golang projects), then mount it as a volume, expose the port 5000 on container to a free port of your choice on your local machine, provide the image id.Please follow the below steps for a detailled guide:
 ### Get the image id
-`docker image ls`
+`docker image ls | grep <your image name>`
 ### Run the docker image
 `docker run -t -d -v <folder to analyse>:/testfolder/ -p<yourport>:5000 --name=volume_analyser <image name>`
 Example:
