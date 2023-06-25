@@ -1,13 +1,13 @@
-# DependencyVisualiser: This is still WIP
+# Dependencyvisualizer: This is still WIP
 ## Description
-Dependncy Visualiser is meant for visualising dependencies of golang based projects and perform analysis on them.
-The visualiser captures modules in a repo and their dependencies as an adjacency list.
+Dependency visualizer is meant for visualizing dependencies of golang based projects and perform analysis on them.
+The visualizer captures modules in a repo and their dependencies as an adjacency list.
 Essentially the module becomes the source vertex and each dependency becomes the destination vertex to which the module points to.
-Thus we form a directed graph. By nature if your project is compiling the graph is also acyclic, since golang compiler breaks on having [cyclical dependencies](https://www.positioniseverything.net/import-cycle-not-allowed/#:~:text=Golang%20does%20not%20allow%20cyclic,if%20your%20packages%20are%20interdependent.), thus for a successflly compiled project we form a *DAG*.
+Thus we form a directed graph. By nature if your project is compiling the graph is also acyclic, since golang compiler breaks on having [cyclical dependencies](https://www.positioniseverything.net/import-cycle-not-allowed/#:~:text=Golang%20does%20not%20allow%20cyclic,if%20your%20packages%20are%20interdependent.), thus for a successfully compiled project we form a *DAG*.
 
 ## Why is a graph helpful?
 Once we get the dependency graph we can use it to perform analysis leveraging various graph algorithms.
-Few of the analysis currently performed by dependency visualiser include:
+Few of the analysis currently performed by dependency visualizer include:
 1. Just by  default, rendering a graph tells us how the components are connected.
 2. On clicking a particular vertex, we traverse the graph with that vertex as source and thus get the dependency graph of the said vertex.
 3. We can filter the graph to only show modules that point to a dependency with specific keywords, this can be useful in filtering only
@@ -27,18 +27,18 @@ Recursively walk a directory we can form an adjacency list with each module as t
 Requires docker to be installed on your machine.
 
 ### build docker image
-From the root of the repo run `docker build -t <my_image_name> -f Docker/dockerfile .`, replacing <my_image_name> with your preffered image name.
+From the root of the repo run `docker build -t <my_image_name> -f Docker/dockerfile .`, replacing <my_image_name> with your preferred image name.
 
 ## Run docker image in the container
-First identify the module you want to analyse(should usually have 1 or more golang projects), then mount it as a volume, expose the port 5000 on container to a free port of your choice on your local machine, provide the image id.Please follow the below steps for a detailled guide:
+First identify the module you want to analyze(should usually have 1 or more golang projects), then mount it as a volume, map the port 5000 on container to port 5000 on your machine, provide the image id.Please follow the below steps for a detailed guide:
 ### Get the image id
 `docker image ls | grep <your image name>`
 ### Run the docker image
-`docker run -t -d -v <folder to analyse>:/testfolder/ -p<yourport>:5000 --name=volume_analyser <image name>`
+`docker run -t -d -v <folder to analyse>:/testfolder/ -p 5000:5000 --name=volume_analyser <image name>`
 Example:
-`docker run -t -d -v C:\Users\gupta\OneDrive\Documents\test:/testfolder/ -p--name=volume_analyser 9cd05bb0862c`
+`docker run -t -d -v C:\Users\gupta\OneDrive\Documents\test:/testfolder/ -p 5000:5000 --name=graph_analyser f0f67cc624db`
 ### Interacting with application
-Once above steps are done, application can be interacted with on `localhost:<port-exposed>`
+Once above steps are done, application can be interacted with on `localhost:5000`
 
 
 ## Sample Visualisation Images:

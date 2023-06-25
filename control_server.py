@@ -12,27 +12,12 @@ app = Flask(__name__)
 CORS(app)
 
 # Provide  the directory path you want to traverse
-# directory_path = 'C:\\Users\\gupta\\OneDrive\\Documents\\test\\'
 # main_dir = 'C:\\Users\\gupta\\OneDrive\\Documents\\test'
 main_dir = '/testfolder'
-test_dir = main_dir
-current_test_dir =  main_dir
-
-# pattern = 'import\(\".+\)'
 
 @app.route('/')
 def index():
     return render_template('index.html')
-
-@app.route('/test_documentation_generator', methods=['GET'])
-def new_page():
-    print("rendering test case doc page")
-    return render_template('test_documentation_generator.html')
-
-def extract_pattern(regex, text):
-    matches = re.findall(regex, text)
-    return matches
-
 
 @app.route('/api/adjacency-list', methods=['GET'])
 def get_adjacency_list():
