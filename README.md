@@ -14,8 +14,8 @@ Few of the analysis currently performed by dependency visualiser include:
 the dependencies which are grouped together by a common prefix.
 Currently adding more features is in progress.
 ### More features planned to be added: 
-1. *perform topological sorting on the graph: * topological sorting can be done on dircted acyclic graphs to get an order in which verticies can be traversed such that when a particular vertex is visited, all vertices that point to the said vertex have already been visited.
-2. *Get a minimum cut of the graph: * this gives the minimum set of vertices required to break the graph into two disjoint sets, this can be used to find out critical dependencies which become the choke points of the repository as well.
+1. **perform topological sorting on the graph:** topological sorting can be done on dircted acyclic graphs to get an order in which verticies can be traversed such that when a particular vertex is visited, all vertices that point to the said vertex have already been visited.
+2. **Get a minimum cut of the graph:** this gives the minimum set of vertices required to break the graph into two disjoint sets, this can be used to find out critical dependencies which become the choke points of the repository as well.
 
 ## 
 This application leverages network module provided by [vis.js](https://visjs.org/) to render a graph.
