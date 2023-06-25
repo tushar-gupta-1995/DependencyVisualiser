@@ -41,5 +41,5 @@ Example:
 
 
 ## Sample Visualisation Images:
-![a complete graph](complete_graph.jpg)
-![dfs a particular module](dfs_specific_module.jpg)
+![a complete graph](complete_graph.JPG)
+![dfs a particular module](dfs_specific_module.JPG)
