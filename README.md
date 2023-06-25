@@ -3,7 +3,7 @@
 Dependncy Visualiser is meant for visualising dependencies of golang based projects and perform analysis on them.
 The visualiser captures modules in a repo and their dependencies as an adjacency list.
 Essentially the module becomes the source vertex and each dependency becomes the destination vertex to which the module points to.
-Thus we form a directed graph. By nature if your project is compiling the graph is also acyclic, since golang compiler breaks on having cyclical dependencies, thus for a successflly compiled project we form a *DAG*.
+Thus we form a directed graph. By nature if your project is compiling the graph is also acyclic, since golang compiler breaks on having [cyclical dependencies](https://www.positioniseverything.net/import-cycle-not-allowed/#:~:text=Golang%20does%20not%20allow%20cyclic,if%20your%20packages%20are%20interdependent.), thus for a successflly compiled project we form a *DAG*.
 
 ## Why is a graph helpful?
 Once we get the dependency graph we can use it to perform analysis leveraging various graph algorithms.
