@@ -1,87 +1,104 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Graph Visualization with vis.js</title>
-  <style type="text/css">
-body {
-  display: flex;
-  background-image:url("graph_theme_use.jpg");
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  margin: 0;
-}
-
-.container {
-  display: flex;
-  align-items: flex-start;
-  margin-right: 300px
-}
-
-#list-container {
-  width: 200px;
-  background-color: #315746;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  padding: 10px;
-  margin-right: 10px; /* Add margin to create space between the two elements */
-}
-
-#graph {
-  width: 600px;
-  height: 600px;
-  background-color: #315746;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  overflow: auto;
-}
-
-.title {  
-  text-align: center;
-  margin-bottom: 600px;
-  font-size: 36px;
-  font-weight: bold;
-  color: #f0f2e9;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-#contextMenu {
-  position: absolute;
-  background-color: #f1f1f1;
-  border: 1px solid #ccc;
-  padding: 5px;
-}
-
-#contextMenu ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-
-#contextMenu ul li {
-  cursor: pointer;
-}
-
-  </style>
-	
-  </style>
-  <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <title>Menu Bar</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        
+        #list-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #adjlist {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 200px;
+            height: 100vh;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: auto;
+        }
+        
+        #graph {
+            margin-left: 200px;
+            width: 70%;
+            min-width: 300px;
+            height: 100vh;
+            background-color: #ccc;
+            padding: 20px;
+            position: relative;
+        }
+        
+        #filter-container {
+            margin-left: 200px;
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            position: fixed;
+        }
+        
+        .filter-input {
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            margin-right: 10px;
+            width: 300px;
+            font-size: 14px;
+        }
+        
+        #filter-button {
+            padding: 8px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        #filter-button:hover {
+            background-color: #999;
+        }
+    </style>
 </head>
-<body>
-  <h1 class="title">Dependency Visualizer</h1>
 
-  <div class="container">
-  <div id="list-container"></div>
-  <!-- Context menu -->
-	<div id="contextMenu" style="display: none;">
-	  <ul>
-		<li>Document Test Cases</li>
-	  </ul>
-	</div>
-  <div id="graph"></div>
-  </div>
-  
-  <script src="{{ url_for('static', filename='ListDirectories.js') }}"></script>
- 
+<body>
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+
+    <div id="list-container">
+    </div>
+
+    <div id="graph">
+    </div>
+
+    <div id="filter-container">
+        <input type="text" id="filter-input" placeholder="DFS keyword filter">
+        <button id="filter-button">Filter</button>
+    </div>
+
+    <pre id="adjlist"></pre>
+
+    <script src="{{ url_for('static', filename='ListDirectories.js') }}"></script>
+
 </body>
+
 </html>
