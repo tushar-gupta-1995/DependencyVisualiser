@@ -17,9 +17,9 @@ Currently adding more features is in progress.
 1. **perform topological sorting on the graph:** topological sorting can be done on dircted acyclic graphs to get an order in which verticies can be traversed such that when a particular vertex is visited, all vertices that point to the said vertex have already been visited.
 2. **Get a minimum cut of the graph:** this gives the minimum set of vertices required to break the graph into two disjoint sets, this can be used to find out critical dependencies which become the choke points of the repository as well.
 
-## 
+## External Dependencies
 This application leverages network module provided by [vis.js](https://visjs.org/) to render a graph.
-The dependencies of a module, can be found using [AST](https://pkg.go.dev/go/ast) package provided by go.
+The dependencies of a module, can be found using [parser](https://pkg.go.dev/go/parser) package provided by go.
 Recursively walk a directory we can form an adjacency list with each module as the source and dependencies as destination.
 
 ## Usage
