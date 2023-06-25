@@ -41,5 +41,9 @@ Example:
 
 
 ## Sample Visualisation Images:
-![a complete graph](complete_graph.JPG)
+
+### graph of a particular repo
+![a complete graph](ReadMeImages\complete_graph.JPG)
+
+### dfs a particular module from the above graph
 ![dfs a particular module](dfs_specific_module.JPG)
