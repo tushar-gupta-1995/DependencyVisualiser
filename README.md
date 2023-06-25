@@ -19,8 +19,8 @@ Currently adding more features is in progress.
 3. *Get a minimum cut of the graph* this gives the minimum set of vertices required to break the graph into two disjoint sets, this can be used to find out critical dependencies which become the choke points of the repository as well.
 
 ## 
-This application leverages network module provided by vis.js[https://visjs.org/] to render a graph.
-The dependencies of a module, can be found using AST[https://pkg.go.dev/go/ast] package provided by go.
+This application leverages network module provided by [vis.js](https://visjs.org/) to render a graph.
+The dependencies of a module, can be found using [AST](https://pkg.go.dev/go/ast) package provided by go.
 Recursively walk a directory we can form an adjacency list with each module as the source and dependencies as destination.
 
 ## Usage
