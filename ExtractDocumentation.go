@@ -92,13 +92,11 @@ func GetDependency(directory string) (map[string][]string, error) {
 	// 	fmt.Print(dep)
 	// }
 
-	// Convert dictionary to JSON
 	jsonData, err := json.Marshal(dependencies)
 	if err != nil {
 		return nil, err
 	}
 
-	// Print JSON data
 	fmt.Println(string(jsonData))
 	return dependencies, nil
 }

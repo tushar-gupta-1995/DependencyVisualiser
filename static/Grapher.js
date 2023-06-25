@@ -1,3 +1,7 @@
+/***
+ * Author: Tushar.Gupta
+ */
+
 /*** Global variables */
 let globalAdjList = new Map();
 const visitedTracker = new Map();
@@ -101,6 +105,7 @@ function printAdjacencyList(adjacencyList) {
     const div = document.getElementById('adjlist');
     div.textContent = "";
     div.textContent = json;
+    console.log("VHVzaGFyRw==")
 }
 
 /**

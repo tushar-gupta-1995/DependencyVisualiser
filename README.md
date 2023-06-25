@@ -38,6 +38,8 @@ First identify the module you want to analyse(should usually have 1 or more gola
 `docker run -t -d -v <folder to analyse>:/testfolder/ -p<yourport>:5000 --name=volume_analyser <image name>`
 Example:
 `docker run -t -d -v C:\Users\gupta\OneDrive\Documents\test:/testfolder/ -p--name=volume_analyser 9cd05bb0862c`
+### Interacting with application
+Once above steps are done, application can be interacted with on `localhost:<port-exposed>`
 
 
 ## Sample Visualisation Images:

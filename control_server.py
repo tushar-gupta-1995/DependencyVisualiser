@@ -51,10 +51,8 @@ def get_adjacency_list():
 
 @app.route('/api/directories', methods=['GET'])
 def get_directories():
-    # Get a list of all items (files and folders) in the directory
     items = os.listdir(main_dir)
 
-    # Filter only the directories from the list
     child_folders = [item for item in items if os.path.isdir(os.path.join(main_dir, item))]
 
     dir_str = {}
@@ -63,6 +61,6 @@ def get_directories():
     return jsonify(dir_str)
 
 if __name__ == '__main__':
-    print("port 5000")
+    print("running on port 5000")
     app.run(host='0.0.0.0', port=5000)
 
