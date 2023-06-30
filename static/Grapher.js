@@ -2,6 +2,14 @@
  * Author: Tushar.Gupta
  */
 
+/***
+ * Global constants
+ */
+const black = "#000000"
+const skyBlue = "#00bfff"
+const lightBlue = "#97C2FC"
+
+
 /*** Global variables */
 let globalAdjList = new Map();
 const visitedTracker = new Map();
@@ -241,12 +249,12 @@ function getOptions(nodes, edges) {
             hierarchical: false
         },
         edges: {
-            color: "#000000"
+            color: black
         },
         nodes: {
             color: {
-                border: "#2B7CE9",
-                background: "#97C2FC"
+                border: skyBlue,
+                background: lightBlue
             }
         }
     };
