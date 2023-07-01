@@ -159,7 +159,7 @@ function depthFirstSearchBroker(node) {
     const options = getOptions(nodes, edges)
 
     const container = document.getElementById("graph");
-    const network = new vis.Network(container, data);
+    const network = new vis.Network(container, data,options);
     printAdjacencyList(spAdjList)
 
 }
