@@ -74,7 +74,21 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
+
+        #rgb-graph {
+            padding: 8px 16px;
+            background-color: #ccc;
+            color: #333;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
         
+        #rgb-graph:hover {
+            background-color: #999;
+        }
+
         #filter-button:hover {
             background-color: #999;
         }
@@ -93,6 +107,7 @@
     <div id="filter-container">
         <input type="text" id="filter-input" placeholder="DFS keyword filter">
         <button id="filter-button">Filter</button>
+        <button id="rgb-graph">rgb me</button>
     </div>
 
     <pre id="adjlist"></pre>

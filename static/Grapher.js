@@ -6,20 +6,21 @@
  * Global constants
  */
 const black = "#000000"
-const skyBlue = "#00bfff"
-const lightBlue = "#97C2FC"
+
+const red = "#FFCCCB"
+const green = "#98D7C2"
+const blue = "#D4F1F4"
 
 
 /*** Global variables */
 let globalAdjList = new Map();
-const visitedTracker = new Map();
+let visitedTracker = new Map();
 
 /*** Functions */
 function main() {
     fetch('http://127.0.0.1:5000/api/directories')
         .then(response => response.json())
         .then(data => {
-            console.log(data.name);
 
             const listContainer = document.getElementById('list-container');
             listContainer.addEventListener("click", renderGraph);
@@ -40,9 +41,9 @@ function main() {
         });
 
     const textbox1 = document.getElementById("filter-input");
-    const submitBtn = document.getElementById("filter-button");
+    const filterBtn = document.getElementById("filter-button");
 
-    submitBtn.addEventListener("click", function() {
+    filterBtn.addEventListener("click", function() {
         const value1 = textbox1.value;
         console.log("Text Box 1 value: ", value1);
 
@@ -101,6 +102,13 @@ function renderGraph(event) {
             });
 
             printAdjacencyList(globalAdjList);
+
+            const rgbBtn = document.getElementById("rgb-graph");
+            rgbBtn.addEventListener("click", function() {
+                coloredData = graphColor(data,globalAdjList)
+                container.innerHTML = "";
+                new vis.Network(container, coloredData, options);
+            });
         })
         .catch(error => {
             console.error('Error fetching adjacency list:', error);
@@ -151,7 +159,7 @@ function depthFirstSearchBroker(node) {
     const options = getOptions(nodes, edges)
 
     const container = document.getElementById("graph");
-    const network = new vis.Network(container, data, options);
+    const network = new vis.Network(container, data);
     printAdjacencyList(spAdjList)
 
 }
@@ -241,6 +249,80 @@ function depthFirstSearchFiltered(node, spAdjList, includeText) {
 }
 
 
+// traverse the graph in a bfs manner, make sure that the color of child node is different from parent node.
+function graphColor(data,adjList) {
+
+    let rgbList = [red,green,blue]
+
+    let colorMap = new Map();
+    
+    let queue = [];
+
+    let colorsToAddLater = [];
+
+    data.nodes.forEach(x => {
+        console.log("pushing: " + x.id);
+        queue.push(x.id);
+    })
+
+    while (queue.length>0)
+    {
+        let nodeId = queue.shift();
+        console.log("visiting: " + nodeId)
+        color = rgbList.shift();
+
+        if (!colorMap.has(nodeId)) {
+            colorMap.set(nodeId, color);
+          }
+        else
+        {
+            color = colorMap.get(nodeId)
+        }
+
+        // remove parent color from rgblist so it can not be used in child nodes
+        colorIndex = rgbList.indexOf(color);
+        rgbList.splice(colorIndex, 1);
+        colorsToAddLater.push(color)
+
+        let listElements = adjList.get(nodeId);
+        data = colorNode(data,nodeId,color)
+        console.log("debugging: " + data.nodes.get(nodeId).color)
+        childColor = rgbList.shift();
+        colorsToAddLater.push(childColor)
+
+        listElements.forEach(x=>{
+            if(x ==="nil"){
+                return;
+            }
+
+            let toColor = childColor
+
+            //first verify if a node is already colored
+            if (colorMap.has(x)) {
+                console.log(x + " already has " + colorMap.get(x) + ", current parent has color: " + color);
+                toColor = colorMap.get(x)
+
+                // if its already colored, and the old colo is equal to current parent color, we need to find a color not matching the parent.
+                if (toColor === color){
+                    rgbList.splice(rgbList.indexOf(toColor), 1);
+                    colorsToAddLater.push(toColor)
+                    toColor = rgbList.shift()
+                }
+            }
+
+            data = colorNode(data,x,toColor)
+            colorMap.set(x, toColor);
+        })
+
+        colorsToAddLater.forEach(x=>{
+            rgbList.push(x);
+        })
+
+    }
+    return data
+}
+
+
 // get options gives a way of dcorating the nodes and edges rendered by vis.js.
 function getOptions(nodes, edges) {
 
@@ -251,14 +333,20 @@ function getOptions(nodes, edges) {
         edges: {
             color: black
         },
-        nodes: {
-            color: {
-                border: skyBlue,
-                background: lightBlue
-            }
-        }
     };
 
+}
+
+// color a specific node with a specific color.
+function colorNode(data,nodeIdToColor, color) {
+    var node = data.nodes.get(nodeIdToColor);
+    // check truthiness...
+    if (node) {
+      console.log("coloring: " + nodeIdToColor + " with color: " + color)
+      node.color = color
+      console.log("debug : " + node.color);
+    }
+    return data
 }
 
 /*** This starts the whole thing */
